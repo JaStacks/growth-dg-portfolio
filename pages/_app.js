@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import CrispChat from "@/components/CrispChat";
 
 const ScrollProgressBar = dynamic(() => import("@/components/ScrollProgressBar"), { ssr: false });
+const CrispDebug = dynamic(() => import("@/components/CrispDebug"), { ssr: false });
 
 export default function App({ Component, pageProps }) {
   return (
@@ -12,6 +13,8 @@ export default function App({ Component, pageProps }) {
       <Navbar />
       <Component {...pageProps} />
       <CrispChat />
+      {/* Remove CrispDebug after confirming Crisp works */}
+      <CrispDebug />
     </>
   );
 }

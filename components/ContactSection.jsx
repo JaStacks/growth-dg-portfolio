@@ -7,15 +7,15 @@ export default function ContactSection() {
     {
       icon: Mail,
       label: "Email",
-      value: "contact@example.com",
-      href: "mailto:contact@example.com",
+      value: "contact@growthdg.com",
+      href: "mailto:contact@growthdg.com",
       color: "text-purple-600 dark:text-purple-400",
     },
     {
       icon: Github,
       label: "GitHub",
-      value: "github.com/company",
-      href: "https://github.com/company",
+      value: "github.com/JaStacks",
+      href: "https://github.com/JaStacks",
       color: "text-zinc-700 dark:text-zinc-300",
     },
     {
@@ -97,7 +97,7 @@ export default function ContactSection() {
           <p className="text-zinc-600 dark:text-zinc-400">
             Prefer to send a message directly?{" "}
             <a
-              href="mailto:contact@example.com"
+              href="mailto:contact@growthdg.com"
               className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
             >
               Send us an email
