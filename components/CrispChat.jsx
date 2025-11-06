@@ -4,12 +4,8 @@ import { useEffect } from "react";
 /**
  * Crisp Chat Widget Component
  * 
- * To set up:
- * 1. Sign up at https://crisp.chat
- * 2. Get your website ID from Crisp dashboard
- * 3. Create a .env.local file in your project root
- * 4. Add: NEXT_PUBLIC_CRISP_WEBSITE_ID=your-website-id-here
- * 5. Restart your dev server
+ * This component loads Crisp chat using the official installation method.
+ * The website ID is hardcoded below - you can also use an environment variable.
  * 
  * To integrate with n8n:
  * 1. In Crisp dashboard, go to Settings > Integrations > Webhooks
@@ -27,44 +23,29 @@ export default function CrispChat() {
     // Only load Crisp in the browser
     if (typeof window === "undefined") return;
 
-    // Get website ID from environment variable
-    const CRISP_WEBSITE_ID = process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID;
+    // Use environment variable or fallback to hardcoded ID
+    const CRISP_WEBSITE_ID = process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID || "51f2c228-82f4-4944-91b1-4b0dd846eaa4";
 
-    // Don't load if website ID is not set
-    if (!CRISP_WEBSITE_ID) {
-      console.warn(
-        "Crisp Chat: NEXT_PUBLIC_CRISP_WEBSITE_ID not set. " +
-        "Please add it to your .env.local file. " +
-        "See CRISP_N8N_SETUP.md for setup instructions."
-      );
+    // Check if Crisp is already loaded
+    if (window.$crisp && window.CRISP_WEBSITE_ID) {
+      console.log("Crisp already loaded");
       return;
     }
 
-    // Initialize Crisp
-    if (!window.$crisp) {
-      window.$crisp = [];
-    }
-    
-    // Set website ID
+    // Initialize Crisp exactly as per official documentation
+    window.$crisp = [];
     window.CRISP_WEBSITE_ID = CRISP_WEBSITE_ID;
 
-    // Load Crisp script if not already loaded
-    if (!document.querySelector('script[src="https://client.crisp.chat/l.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://client.crisp.chat/l.js";
-      script.async = true;
-      document.getElementsByTagName("head")[0].appendChild(script);
-    }
+    // Load Crisp script using the official method
+    (function() {
+      const d = document;
+      const s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
 
-    // Configure Crisp settings
-    if (window.$crisp) {
-      // Set session segments
-      window.$crisp.push(["set", "session:segments", ["website"]]);
-      
-      // Optional: Set user information if available
-      // window.$crisp.push(["set", "user:email", "user@example.com"]);
-      // window.$crisp.push(["set", "user:nickname", "User Name"]);
-    }
+    console.log("Crisp chat initialized with Website ID:", CRISP_WEBSITE_ID);
   }, []);
 
   // This component doesn't render anything visible

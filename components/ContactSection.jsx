@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Twitter } from "lucide-react";
+import { Mail, Github, User } from "lucide-react";
+import Link from "next/link";
 
 export default function ContactSection() {
   const contactMethods = [
@@ -10,6 +11,7 @@ export default function ContactSection() {
       value: "contact@growthdg.com",
       href: "mailto:contact@growthdg.com",
       color: "text-purple-600 dark:text-purple-400",
+      external: true,
     },
     {
       icon: Github,
@@ -17,20 +19,15 @@ export default function ContactSection() {
       value: "github.com/JaStacks",
       href: "https://github.com/JaStacks",
       color: "text-zinc-700 dark:text-zinc-300",
+      external: true,
     },
     {
-      icon: Linkedin,
-      label: "LinkedIn",
-      value: "linkedin.com/company",
-      href: "https://linkedin.com/company",
-      color: "text-blue-600 dark:text-blue-400",
-    },
-    {
-      icon: Twitter,
-      label: "Twitter",
-      value: "@company",
-      href: "https://twitter.com/company",
-      color: "text-sky-500 dark:text-sky-400",
+      icon: User,
+      label: "Founder",
+      value: "Learn more about our founder",
+      href: "/jastacks",
+      color: "text-purple-600 dark:text-purple-400",
+      external: false,
     },
   ];
 
@@ -55,12 +52,19 @@ export default function ContactSection() {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {contactMethods.map((method, index) => {
             const Icon = method.icon;
+            const Component = method.external ? motion.a : motion.div;
+            const linkProps = method.external
+              ? {
+                  href: method.href,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                }
+              : {};
+
             return (
-              <motion.a
+              <Component
                 key={method.label}
-                href={method.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...linkProps}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -69,20 +73,38 @@ export default function ContactSection() {
                 whileTap={{ scale: 0.98 }}
                 className="group p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-purple-300 dark:hover:border-purple-700 transition-all shadow-sm hover:shadow-md"
               >
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/20 transition-colors ${method.color}`}>
-                    <Icon className="w-6 h-6" />
+                {!method.external ? (
+                  <Link href={method.href} className="block">
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/20 transition-colors ${method.color}`}>
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wider">
+                          {method.label}
+                        </h3>
+                        <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                          {method.value}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/20 transition-colors ${method.color}`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wider">
+                        {method.label}
+                      </h3>
+                      <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        {method.value}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wider">
-                      {method.label}
-                    </h3>
-                    <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                      {method.value}
-                    </p>
-                  </div>
-                </div>
-              </motion.a>
+                )}
+              </Component>
             );
           })}
         </div>
@@ -96,12 +118,19 @@ export default function ContactSection() {
         >
           <p className="text-zinc-600 dark:text-zinc-400">
             Prefer to send a message directly?{" "}
-            <a
-              href="mailto:contact@growthdg.com"
-              className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined" && window.$crisp) {
+                  window.$crisp.push(["do", "chat:open"]);
+                } else {
+                  // Fallback to email if Crisp isn't loaded yet
+                  window.location.href = "mailto:contact@growthdg.com";
+                }
+              }}
+              className="text-purple-600 dark:text-purple-400 hover:underline font-medium cursor-pointer"
             >
-              Send us an email
-            </a>
+              Send us a chat
+            </button>
           </p>
         </motion.div>
       </div>
