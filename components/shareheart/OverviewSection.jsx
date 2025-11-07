@@ -1,6 +1,6 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -16,13 +16,29 @@ const geistMono = Geist_Mono({
 
 export default function OverviewSection() {
   const sectionRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"]
+    offset: isMobile ? ["start 0.9", "end 0.1"] : ["start end", "end start"],
+    layoutEffect: false
   });
 
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  // Reduced movement on mobile and for reduced motion preference
+  const movementMultiplier = prefersReducedMotion ? 0 : (isMobile ? 0.5 : 1);
+  
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 50 * movementMultiplier]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, -50 * movementMultiplier]);
 
   // Screenshots with alternating layout and context
   const screenshots = [
@@ -74,16 +90,22 @@ export default function OverviewSection() {
   ];
 
   return (
-    <section ref={sectionRef} className={`${geistSans.variable} ${geistMono.variable} relative py-32 bg-zinc-50 dark:bg-black border-b border-zinc-200 dark:border-zinc-900 overflow-hidden`}>
+    <section ref={sectionRef} className={`${geistSans.variable} ${geistMono.variable} relative py-16 sm:py-20 md:py-24 lg:py-32 bg-zinc-50 dark:bg-black border-b border-zinc-200 dark:border-zinc-900 overflow-hidden`}>
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Text Content */}
-        <div className="max-w-4xl mx-auto mb-24 md:mb-32">
+        <div className="max-w-4xl mx-auto mb-16 sm:mb-20 md:mb-24 lg:mb-32">
           <motion.div
-            style={{ y: textY }}
-            initial={{ opacity: 0, y: 30 }}
+            style={{ 
+              y: textY,
+              willChange: prefersReducedMotion ? "auto" : "transform"
+            }}
+            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+            transition={{ 
+              duration: prefersReducedMotion ? 0 : 0.8,
+              ease: [0.4, 0, 0.2, 1]
+            }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               What We Built
@@ -109,7 +131,7 @@ export default function OverviewSection() {
 // Screenshot showcase with alternating layout and scroll effects
 function ScreenshotShowcase({ screenshots }) {
   return (
-    <div className="space-y-32 md:space-y-40">
+    <div className="space-y-20 sm:space-y-24 md:space-y-32 lg:space-y-40">
       {screenshots.map((screenshot, index) => (
         <ScreenshotItem key={screenshot.key} screenshot={screenshot} index={index} />
       ))}
@@ -121,29 +143,46 @@ function ScreenshotShowcase({ screenshots }) {
 function ScreenshotItem({ screenshot, index }) {
   const isLeft = index % 2 === 0;
   const itemRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: itemRef,
-    offset: ["start end", "end start"]
+    offset: isMobile ? ["start 0.9", "end 0.1"] : ["start end", "end start"],
+    layoutEffect: false
   });
 
+  // Reduced movement on mobile and for reduced motion preference
+  const movementMultiplier = prefersReducedMotion ? 0 : (isMobile ? 0.4 : 1);
+  const rotateMultiplier = prefersReducedMotion ? 0 : (isMobile ? 0.5 : 1);
+  
   // Image transforms - moves opposite to text
-  const screenshotY = useTransform(scrollYProgress, [0, 1], [0, isLeft ? -50 : 50]);
+  const screenshotY = useTransform(scrollYProgress, [0, 1], [0, isLeft ? -50 * movementMultiplier : 50 * movementMultiplier]);
   const screenshotRotate = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [screenshot.rotate, 0, -screenshot.rotate]
+    [screenshot.rotate * rotateMultiplier, 0, -screenshot.rotate * rotateMultiplier]
   );
   const screenshotOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const screenshotScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.96]);
 
   // Text transforms - moves opposite to image for parallax
-  const textY = useTransform(scrollYProgress, [0, 1], [0, isLeft ? 40 : -40]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, isLeft ? 40 * movementMultiplier : -40 * movementMultiplier]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
 
   return (
     <div
       ref={itemRef}
-      className={`flex items-center ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} flex-col gap-12 md:gap-16 min-h-[80vh]`}
+      className={`flex items-center ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-16 min-h-[70vh] sm:min-h-[75vh] md:min-h-[80vh]`}
     >
       {/* Image */}
       <motion.div
@@ -151,12 +190,16 @@ function ScreenshotItem({ screenshot, index }) {
           y: screenshotY,
           rotate: screenshotRotate,
           opacity: screenshotOpacity,
-          scale: screenshotScale
+          scale: screenshotScale,
+          willChange: prefersReducedMotion ? "auto" : "transform"
         }}
-        initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+        initial={{ opacity: 0, x: prefersReducedMotion ? 0 : (isLeft ? -50 : 50) }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+        viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+        transition={{ 
+          duration: prefersReducedMotion ? 0 : 0.8, 
+          ease: [0.4, 0, 0.2, 1]
+        }}
         className={`flex-1 ${isLeft ? 'md:pr-8' : 'md:pl-8'}`}
       >
         <div className="relative w-full aspect-[9/16] max-w-sm mx-auto md:max-w-md">
@@ -180,12 +223,17 @@ function ScreenshotItem({ screenshot, index }) {
       <motion.div
         style={{
           y: textY,
-          opacity: textOpacity
+          opacity: textOpacity,
+          willChange: prefersReducedMotion ? "auto" : "transform"
         }}
-        initial={{ opacity: 0, x: isLeft ? 50 : -50 }}
+        initial={{ opacity: 0, x: prefersReducedMotion ? 0 : (isLeft ? 50 : -50) }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+        transition={{ 
+          duration: prefersReducedMotion ? 0 : 0.8, 
+          delay: prefersReducedMotion ? 0 : 0.2, 
+          ease: [0.4, 0, 0.2, 1]
+        }}
         className={`flex-1 ${isLeft ? 'md:pl-8' : 'md:pr-8'} flex flex-col justify-center`}
       >
         <div className="max-w-lg mx-auto md:mx-0">
@@ -202,10 +250,14 @@ function ScreenshotItem({ screenshot, index }) {
             {screenshot.features.map((feature, featureIndex) => (
               <motion.div
                 key={featureIndex}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 + featureIndex * 0.1 }}
+                viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+                transition={{ 
+                  duration: prefersReducedMotion ? 0 : 0.5, 
+                  delay: prefersReducedMotion ? 0 : 0.3 + featureIndex * 0.1,
+                  ease: [0.4, 0, 0.2, 1]
+                }}
                 className="flex items-start gap-3"
               >
                 <span className="text-purple-600 dark:text-purple-400 mt-1 font-bold">•</span>

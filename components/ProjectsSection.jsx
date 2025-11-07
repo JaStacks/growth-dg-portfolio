@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import ProjectCard from "./ProjectCard";
 
 const projects = [
@@ -13,32 +14,51 @@ const projects = [
 ];
 
 export default function ProjectsSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
-    <section className="w-full py-24 md:py-32 bg-zinc-50 dark:bg-black">
+    <section className="w-full py-16 sm:py-20 md:py-24 lg:py-32 bg-zinc-50 dark:bg-black">
       <div className="mx-auto w-full max-w-6xl px-6">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+          transition={{ 
+            duration: prefersReducedMotion ? 0 : 0.8,
+            ease: [0.4, 0, 0.2, 1]
+          }}
+          className="text-center mb-12 sm:mb-14 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-3 md:mb-4">
             Featured Projects
           </h2>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
             A selection of projects we've built, showcasing our expertise in full-stack development, 
             real-time systems, and user experience design.
           </p>
         </motion.div>
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:gap-8">
           {projects.map((p, index) => (
             <motion.div
               key={p.title}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+              transition={{ 
+                duration: prefersReducedMotion ? 0 : 0.6, 
+                delay: prefersReducedMotion ? 0 : index * 0.1,
+                ease: [0.4, 0, 0.2, 1]
+              }}
             >
               <ProjectCard {...p} />
             </motion.div>

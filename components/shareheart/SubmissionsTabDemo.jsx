@@ -1,34 +1,39 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Check, Star, Download, Search, Clock, User, Mail, Video, Eye, Trash2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Star, Check, AlertTriangle } from "lucide-react";
+import FloatingActionsStack from "./FloatingActionsStack";
 
 const MOCK_SUBMISSIONS = [
-  { id: '1', name: "Sarah Chen", email: "sarah@example.com", approved: true, featured: false, date: "2024-01-15" },
-  { id: '2', name: "Marcus Johnson", email: "marcus@example.com", approved: true, featured: true, date: "2024-01-14" },
-  { id: '3', name: "Emily Rodriguez", email: "emily@example.com", approved: false, featured: false, date: "2024-01-13" },
-  { id: '4', name: "David Kim", email: "david@example.com", approved: true, featured: false, date: "2024-01-12" },
-  { id: '5', name: "Jessica Wang", email: "jessica@example.com", approved: false, featured: false, date: "2024-01-11" },
-  { id: '6', name: "Alex Thompson", email: "alex@example.com", approved: true, featured: true, date: "2024-01-10" },
+  { id: '1', name: "Sarah Chen", approved: true, featured: false, color: "from-purple-500 to-indigo-500" },
+  { id: '2', name: "Marcus Johnson", approved: true, featured: true, color: "from-indigo-500 to-pink-500" },
+  { id: '3', name: "Emily Rodriguez", approved: true, featured: false, color: "from-pink-500 to-purple-500" },
+  { id: '4', name: "David Kim", approved: true, featured: true, color: "from-blue-500 to-cyan-500" },
+  { id: '5', name: "Jessica Wang", approved: true, featured: false, color: "from-purple-500 to-pink-500" },
+  { id: '6', name: "Alex Thompson", approved: true, featured: false, color: "from-indigo-500 to-purple-500" },
 ];
 
 export default function SubmissionsTabDemo() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterTab, setFilterTab] = useState("all");
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const containerRef = useRef(null);
 
-  const filteredSubmissions = MOCK_SUBMISSIONS.filter((submission) => {
-    const matchesSearch = searchQuery.trim() === '' ||
-      submission.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      submission.email.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    let passesFilter = true;
-    if (filterTab === 'pending') passesFilter = !submission.approved;
-    else if (filterTab === 'approved') passesFilter = submission.approved;
-    else if (filterTab === 'featured') passesFilter = submission.featured;
-
-    return matchesSearch && passesFilter;
+  // Scroll progress for the section
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
   });
+
+  // Cards fade in and move up
+  const cardsY = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [50, 0, 0, -50]);
+  const cardsOpacity = useTransform(scrollYProgress, [0, 0.2, 0.3, 0.7, 0.8, 1], [0, 0.5, 1, 1, 0.8, 0]);
+
+  // Floating actions scroll into place from right
+  const actionsX = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [100, 50, 0, 0, -100]);
+  const actionsY = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [120, 60, 0, -60, -140]);
+  const actionsOpacity = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [0, 0.5, 1, 1, 0]);
+  const actionsScale = useTransform(scrollYProgress, [0, 0.3, 0.5, 0.7, 1], [0.8, 0.9, 1, 1, 0.9]);
+  const guideY = useTransform(scrollYProgress, [0, 0.2, 0.5, 0.7, 1], [40, 0, 0, -40, -100]);
+  const guideOpacity = useTransform(scrollYProgress, [0, 0.15, 0.4, 0.65, 1], [0, 0.8, 1, 0.9, 0]);
 
   const toggleSelect = (id) => {
     setSelectedIds(prev => {
@@ -39,209 +44,135 @@ export default function SubmissionsTabDemo() {
     });
   };
 
-  const getFilterCount = (filter) => {
-    if (filter === 'all') return MOCK_SUBMISSIONS.length;
-    if (filter === 'pending') return MOCK_SUBMISSIONS.filter(s => !s.approved).length;
-    if (filter === 'approved') return MOCK_SUBMISSIONS.filter(s => s.approved).length;
-    if (filter === 'featured') return MOCK_SUBMISSIONS.filter(s => s.featured).length;
-    return 0;
+  const handleApprove = () => {
+    console.log("Approve", Array.from(selectedIds));
+  };
+
+  const handleFeature = () => {
+    console.log("Feature", Array.from(selectedIds));
+  };
+
+  const handleDownload = () => {
+    console.log("Download", Array.from(selectedIds));
   };
 
   return (
-    <div className="w-full space-y-3 md:space-y-4">
-      {/* Search and Filter Bar */}
-      <div className="flex flex-col sm:flex-row gap-2 md:gap-3 items-stretch sm:items-center">
-        <div className="relative flex-1 min-w-0">
-          <Search className="absolute left-2.5 md:left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 dark:text-zinc-500 h-3.5 w-3.5 md:h-4 md:w-4" />
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-zinc-900 dark:text-zinc-50"
-          />
+    <div ref={containerRef} className="w-full relative min-h-[150vh] py-32">
+      <motion.div
+        style={{ y: guideY, opacity: guideOpacity }}
+        className="sticky top-8 max-w-md mx-auto mb-12"
+      >
+        <div className="rounded-2xl border-2 border-white/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 text-white flex items-center justify-center shadow-lg">
+              <AlertTriangle className="h-5 w-5" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                How the Submissions tab works
+              </p>
+              <div className="flex flex-wrap gap-1.5 text-xs text-purple-700 dark:text-purple-200">
+                <span className="inline-flex items-center gap-1 rounded-full bg-purple-100/70 dark:bg-purple-500/10 px-2 py-0.5">
+                  <span className="font-bold">1</span> Select stories
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-purple-100/70 dark:bg-purple-500/10 px-2 py-0.5">
+                  <span className="font-bold">2</span> Use floating actions
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-purple-100/70 dark:bg-purple-500/10 px-2 py-0.5">
+                  <span className="font-bold">3</span> Feature favourites
+                </span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                Approved stories appear on your wall, and Featured ones get highlighted for your team.
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-1.5 md:gap-2 flex-wrap">
-          {['all', 'pending', 'approved', 'featured'].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setFilterTab(filter)}
-              className={`px-2.5 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors whitespace-nowrap ${
-                filterTab === filter
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'
-              }`}
-            >
-              <span className="hidden sm:inline">{filter.charAt(0).toUpperCase() + filter.slice(1)}</span>
-              <span className="sm:hidden">{filter.charAt(0).toUpperCase()}</span>
-              <span className="ml-1">({getFilterCount(filter)})</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      </motion.div>
 
-      {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-        {filteredSubmissions.map((submission, index) => (
+      {/* 2 Columns of 9:16 Testimony Cards */}
+      <motion.div
+        style={{ y: cardsY, opacity: cardsOpacity }}
+        className="grid grid-cols-2 gap-4 sticky top-24"
+      >
+        {MOCK_SUBMISSIONS.map((submission, index) => (
           <motion.div
             key={submission.id}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
+            className="group relative"
           >
             <div
-              className={`group relative overflow-hidden rounded-xl md:rounded-2xl border-2 transition-all duration-300 cursor-pointer bg-white dark:bg-zinc-900 ${
-                selectedIds.has(submission.id)
-                  ? 'border-purple-400 shadow-2xl shadow-purple-400/50 scale-[1.02]'
-                  : 'border-transparent hover:border-purple-400 hover:shadow-xl'
-              }`}
               onClick={() => toggleSelect(submission.id)}
+              className={`relative aspect-[9/16] rounded-xl overflow-hidden border-2 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
+                selectedIds.has(submission.id)
+                  ? 'border-purple-400 shadow-2xl shadow-purple-400/50 ring-2 ring-purple-400'
+                  : 'border-zinc-200 dark:border-zinc-800 shadow-lg hover:shadow-xl'
+              }`}
             >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-0" />
-              
-              <div className="relative space-y-3 md:space-y-4 p-4 md:p-6">
-                {/* Header with badge and selection */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    {submission.approved ? (
-                      <div className="px-2.5 py-1 rounded-lg bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-xs font-semibold shadow-sm">
-                        Approved
-                      </div>
-                    ) : (
-                      <div className="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 text-xs font-semibold shadow-sm">
-                        Pending
-                      </div>
-                    )}
-                    {submission.featured && (
-                      <div className="px-2.5 py-1 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 text-xs font-semibold shadow-sm flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-current" />
-                        Featured
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Selection indicator */}
-                  <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                      selectedIds.has(submission.id)
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700'
-                    }`}
-                  >
-                    {selectedIds.has(submission.id) && <Check className="w-4 h-4" />}
+              {/* Video thumbnail area with gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${submission.color}`}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-white text-5xl font-bold">
+                    {submission.name[0]}
                   </div>
                 </div>
-
-                {/* Video thumbnail */}
-                <div className="relative aspect-[9/16] rounded-lg overflow-hidden bg-gradient-to-br from-purple-500 via-indigo-500 to-pink-500">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-white text-4xl md:text-5xl font-bold">
-                      {submission.name[0]}
+                <div className={`absolute inset-0 transition-colors ${
+                  selectedIds.has(submission.id) ? 'bg-purple-500/20' : 'bg-black/10 group-hover:bg-black/5'
+                }`} />
+                
+                {/* Selection indicator */}
+                <div className={`absolute top-3 left-3 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                  selectedIds.has(submission.id)
+                    ? 'bg-purple-600 text-white shadow-lg scale-110'
+                    : 'bg-white/20 backdrop-blur-sm border-2 border-white/30'
+                }`}>
+                  {selectedIds.has(submission.id) && <Check className="w-4 h-4" />}
+                </div>
+                
+                {/* Featured badge */}
+                {submission.featured && (
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="px-2.5 py-1 rounded-full bg-purple-600/90 backdrop-blur-sm text-white text-xs font-bold flex items-center gap-1 shadow-lg">
+                      <Star className="w-3 h-3 fill-current" />
+                      Featured
                     </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                </div>
+                )}
+              </div>
 
-                {/* Name and info */}
-                <div className="space-y-2">
-                  <h3 className="text-base md:text-lg font-bold text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
-                    {submission.name}
-                  </h3>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Clock className="w-3 h-3" />
-                    {new Date(submission.date).toLocaleDateString()}
+              {/* Name overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4">
+                <h3 className="text-white font-bold text-sm mb-1 truncate">
+                  {submission.name}
+                </h3>
+                {submission.approved && (
+                  <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-green-500/80 backdrop-blur-sm text-white text-xs font-semibold">
+                    Approved
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Mail className="w-3 h-3" />
-                    <span className="truncate">{submission.email}</span>
-                  </div>
-                </div>
-
-                {/* Stats */}
-                <div className="flex items-center gap-3 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                      <Video className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-foreground">Video</div>
-                      <div className="text-[10px] text-muted-foreground">Ready</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action buttons */}
-                <div className="flex items-center gap-2 pt-2">
-                  <button
-                    className="flex-1 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-xs font-medium text-foreground transition-colors flex items-center justify-center gap-1.5"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // View action
-                    }}
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">View</span>
-                  </button>
-                  <button
-                    className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-red-100 dark:hover:bg-red-900/30 text-xs font-medium text-foreground hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Delete action
-                    }}
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                )}
               </div>
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Floating action buttons when items are selected */}
-      {selectedIds.size > 0 && (
-        <div className="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-50 flex flex-col gap-2">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl md:rounded-2xl shadow-2xl border-2 border-zinc-200 dark:border-zinc-800 p-1.5 md:p-2 flex flex-col gap-1.5 md:gap-2">
-            <button 
-              className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors shadow-lg"
-              aria-label="Approve"
-            >
-              <Check className="w-4 h-4 md:w-5 md:h-5" />
-            </button>
-            <button 
-              className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-purple-500 text-white flex items-center justify-center hover:bg-purple-600 transition-colors shadow-lg"
-              aria-label="Feature"
-            >
-              <Star className="w-4 h-4 md:w-5 md:h-5" />
-            </button>
-            <button 
-              className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors shadow-lg"
-              aria-label="Download"
-            >
-              <Download className="w-4 h-4 md:w-5 md:h-5" />
-            </button>
-            <button
-              onClick={() => setSelectedIds(new Set())}
-              className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
-              aria-label="Clear selection"
-            >
-              <span className="text-xs md:text-sm font-bold">×</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {filteredSubmissions.length === 0 && (
-        <div className="text-center py-8 md:py-12">
-          <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400">
-            {searchQuery || filterTab !== 'all'
-              ? 'No submissions match your filters'
-              : 'No submissions yet'}
-          </p>
-        </div>
-      )}
+      {/* Vertical floating action buttons - scroll into place */}
+      <FloatingActionsStack
+        selectedCount={selectedIds.size}
+        onApprove={handleApprove}
+        onFeature={handleFeature}
+        onDownload={handleDownload}
+        onClear={() => setSelectedIds(new Set())}
+        style={{
+          x: actionsX,
+          y: actionsY,
+          opacity: actionsOpacity,
+          scale: actionsScale,
+        }}
+      />
     </div>
   );
 }

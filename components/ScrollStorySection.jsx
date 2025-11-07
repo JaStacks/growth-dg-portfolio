@@ -1,13 +1,32 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 export default function AboutSection() {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
-  const fgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const { scrollYProgress } = useScroll({ 
+    target: ref, 
+    offset: isMobile ? ["start 0.9", "end 0.1"] : ["start end", "end start"],
+    layoutEffect: false
+  });
+
+  // Reduced movement on mobile and for reduced motion preference
+  const movementMultiplier = prefersReducedMotion ? 0 : (isMobile ? 0.6 : 1);
+  
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", `${-20 * movementMultiplier}%`]);
+  const fgY = useTransform(scrollYProgress, [0, 1], ["0%", `${20 * movementMultiplier}%`]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]);
 
   const skills = [
@@ -17,17 +36,27 @@ export default function AboutSection() {
   ];
 
   return (
-    <section ref={ref} className="relative w-full min-h-[100vh] overflow-hidden bg-white dark:bg-black py-24 md:py-32">
-      <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0 opacity-20">
+    <section ref={ref} className="relative w-full min-h-[100vh] overflow-hidden bg-white dark:bg-black py-16 sm:py-20 md:py-24 lg:py-32">
+      <motion.div 
+        style={{ 
+          y: bgY,
+          willChange: prefersReducedMotion ? "auto" : "transform"
+        }} 
+        className="pointer-events-none absolute inset-0 opacity-20"
+      >
         <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-purple-500 blur-3xl" />
         <div className="absolute right-0 bottom-10 h-72 w-72 rounded-full bg-indigo-500 blur-3xl" />
       </motion.div>
 
       <div className="relative mx-auto flex h-full w-full max-w-6xl items-center px-6">
-        <div className="w-full grid md:grid-cols-2 gap-12 md:gap-16">
+        <div className="w-full grid md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16">
           <motion.div 
-            style={{ y: fgY, opacity }} 
-            className="space-y-6"
+            style={{ 
+              y: fgY, 
+              opacity,
+              willChange: prefersReducedMotion ? "auto" : "transform"
+            }} 
+            className="space-y-4 sm:space-y-5 md:space-y-6"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-50">
               About
@@ -47,8 +76,12 @@ export default function AboutSection() {
           </motion.div>
 
           <motion.div 
-            style={{ y: fgY, opacity: opacity }} 
-            className="space-y-8"
+            style={{ 
+              y: fgY, 
+              opacity: opacity,
+              willChange: prefersReducedMotion ? "auto" : "transform"
+            }} 
+            className="space-y-6 sm:space-y-7 md:space-y-8"
           >
             <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
               Skills & Technologies
@@ -57,10 +90,14 @@ export default function AboutSection() {
               {skills.map((skill, index) => (
                 <motion.div
                   key={skill.category}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+                  transition={{ 
+                    duration: prefersReducedMotion ? 0 : 0.5, 
+                    delay: prefersReducedMotion ? 0 : index * 0.1,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
                 >
                   <h4 className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2 uppercase tracking-wider">
                     {skill.category}
