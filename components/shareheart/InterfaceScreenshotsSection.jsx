@@ -234,8 +234,8 @@ function SplitShowcaseSection() {
                 transition={{ duration: 0.8 }}
                 className="flex justify-center"
               >
-                <div className="rounded-2xl border-2 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xl max-w-xs md:max-w-sm">
-                  <div className="px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
+                <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg rounded-3xl border border-zinc-200/80 bg-white/95 dark:bg-zinc-900/95 dark:border-zinc-800/80 shadow-2xl backdrop-blur-sm">
+                  <div className="flex items-center gap-2 border-b border-zinc-200/80 px-5 py-3 dark:border-zinc-800/80 dark:bg-zinc-950/80">
                     <div className="flex gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
                       <div className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
@@ -243,7 +243,7 @@ function SplitShowcaseSection() {
                     </div>
                     <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">WebcamCaptureDemo</span>
                   </div>
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
                     <WebcamCaptureDemo />
                   </div>
                 </div>

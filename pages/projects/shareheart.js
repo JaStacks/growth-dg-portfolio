@@ -6,12 +6,39 @@ import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import VideoWallHero from "@/components/shareheart/VideoWallHero";
 import ShareDialog from "@/components/shareheart/ShareDialog";
-import FeaturedCarousel from "@/components/shareheart/FeaturedCarousel";
+import VideoCarousel from "@/components/shareheart/VideoCarousel";
 import WebcamCaptureDemo from "@/components/shareheart/WebcamCaptureDemo";
 import HeroSection from "@/components/shareheart/HeroSection";
 import OverviewSection from "@/components/shareheart/OverviewSection";
 import InterfaceScreenshotsSection from "@/components/shareheart/InterfaceScreenshotsSection";
 import BottomSheet from "@/components/shareheart/BottomSheet";
+
+const FEATURED_VIDEO_DEMO = [
+  {
+    id: "carousel-1",
+    testimonyName: "Featured Story One",
+    tagline: "Curated highlight from our latest collection",
+    aspectLabel: "16:9",
+    featured: true,
+    thumbnail: "/project_images/shareheart/1videocarousel.jpg",
+  },
+  {
+    id: "carousel-2",
+    testimonyName: "Featured Story Two",
+    tagline: "Inspiration captured during a live session",
+    aspectLabel: "16:9",
+    featured: true,
+    thumbnail: "/project_images/shareheart/2videocarousel.jpg",
+  },
+  {
+    id: "carousel-3",
+    testimonyName: "Featured Story Three",
+    tagline: "Team favorites from the launch campaign",
+    aspectLabel: "16:9",
+    featured: true,
+    thumbnail: "/project_images/shareheart/videocarousel.jpg",
+  },
+];
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -565,16 +592,16 @@ function ScrollControlledCarouselDemo({ carouselIndex, setCarouselIndex }) {
                 Featured Content
               </div>
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-5 text-zinc-900 dark:text-zinc-50 leading-tight">
-                Featured Stories
+                Featured Stories Carousel
               </h3>
               <p className="text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                Showcase your most impactful testimonies with an elegant carousel. Scroll to navigate through featured stories with smooth transitions.
+                This is the production carousel from our admin app—built on real customer footage, hover activated controls, and status-aware badges so teams can curate their top stories in seconds.
               </p>
             </div>
             
             <div className="flex items-center gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
               <div className="flex gap-1.5">
-                {[0, 1, 2].map((idx) => (
+                {FEATURED_VIDEO_DEMO.map((_, idx) => (
                   <div
                     key={idx}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -586,7 +613,7 @@ function ScrollControlledCarouselDemo({ carouselIndex, setCarouselIndex }) {
                 ))}
               </div>
               <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                {carouselIndex + 1} / 3
+                {carouselIndex + 1} / {FEATURED_VIDEO_DEMO.length}
               </span>
             </div>
           </motion.div>
@@ -605,10 +632,14 @@ function ScrollControlledCarouselDemo({ carouselIndex, setCarouselIndex }) {
                   <div className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
                 </div>
-                <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">FeaturedCarousel</span>
+                <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">VideoCarousel</span>
               </div>
               <div className="p-4 md:p-6">
-                <FeaturedCarousel selectedIndex={carouselIndex} onSelect={setCarouselIndex} />
+                <VideoCarousel
+                  videos={FEATURED_VIDEO_DEMO}
+                  activeIndex={carouselIndex}
+                  onActiveIndexChange={setCarouselIndex}
+                />
               </div>
             </div>
           </motion.div>
