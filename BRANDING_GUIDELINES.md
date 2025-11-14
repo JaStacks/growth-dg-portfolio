@@ -1,3 +1,67 @@
+# Collab Brand System
+
+## Palette
+
+| Role | Hex | Notes |
+| --- | --- | --- |
+| Primary Vivid Blue | `#2563FF` | Hero headlines, primary CTAs, key highlights |
+| Deep Ink | `#0F172A` | Body text, navigation, iconography |
+| Signal Coral | `#FF5A5F` | Secondary CTAs, badges, motion cues |
+| Soft Mint | `#8EE3D4` | Background washes, hover glows, supporting shapes |
+| Powder Sky | `#EEF3FF` | Surface backgrounds, cards, hero canvas |
+| Warm Cloud | `#F6F7FB` | Page background, section dividers, neutral UI states |
+
+**Usage**:
+- Keep Primary Vivid Blue as the most saturated hue (CTA buttons, emphasized phrases, interactive states).
+- Reserve Signal Coral for moments of energy (micro-interactions, notifications, small callouts).
+- Use Powder Sky and Warm Cloud to build layered layouts that feel airy; anchor text with Deep Ink for contrast.
+- Pair Soft Mint with blues sparingly to create playful supporting shapes or underline elements.
+
+## Typography
+
+- **Display**: Space Grotesk (`--font-space-grotesk`, 400–700). Deploy on hero headlines, section intros, numeric stats. Aim for tight tracking (`tracking-[-0.02em]`) and generous line-height on mobile.
+- **Body & UI**: Inter (`--font-inter`, 400–600). Use for supporting copy, navigation, buttons, and captions. Maintain comfortable line-height (`leading-relaxed`) and white space.
+- **Fallback Stack**: `Space Grotesk, "SpaceGrotesk", Inter, "Inter", "Helvetica Neue", Arial, sans-serif`.
+
+**Pairing guidance**:
+- Combine Space Grotesk headlines with lighter Inter subheads for hierarchy.
+- Keep button text uppercase Inter medium to reinforce clarity.
+- Use numeric OpenType features (`font-feature-settings: "ss01", "cv02"`) for consistent glyphs when available.
+
+## Usage Guidance
+
+- **Vibe**: Bold, energetic optimism. Balance large typography with playful badges and floating shapes. Avoid heavy gradients; favor soft atmospheric washes.
+- **Layout**: Hero sections should combine one dominant statement, a strong CTA cluster, and supporting storytelling card. Maintain generous padding (`py-24`+) and max width around `max-w-6xl`.
+- **Imagery**: Lean into candid creator photography or color-blocked illustrations. Combine with mint or coral accent frames to humanize the tech-forward palette.
+- **Buttons**: Primary CTA uses solid Vivid Blue with subtle glow shadow (`0 15px 35px rgba(37, 99, 255, 0.25)`). Secondary CTA uses outlined Ink text with underlines that animate to blue on hover.
+- **Badges**: Use pill badges with Powder Sky fills and coral dots to introduce sections or stamp credibility.
+- **Motion**: Subtle parallax on supporting shapes (±16px) and floating cards. Entrance animations: fade/slide up over 0.6–0.8s with cubic easing `[0.4, 0, 0.2, 1]`.
+
+## Copy Guidelines
+
+- **Voice Pillars**
+  - *Live Energy*: Write in the present tense, as if we’re already inside the collaboration. Short, punchy sentences that feel like a live wire.
+  - *Wry Confidence*: Inject light humor or clever turns without sarcasm. Smile while you sell—never snark.
+  - *Operational Backbone*: Pair every punchline with proof. Highlight how we build operations, brands, and apps that keep teams moving.
+- **Personality Traits**: Relatable founder energy, optimistic, resourceful, builder mindset, “let’s ship” attitude.
+- **Audience Focus**: Speak to founders, CMOs, and operator-less teams craving structure. Tie every line to how we solve their brand, ops, or product gaps.
+- **Message Ladder**
+  1. *Promise*: “We build the brand, the ops, and the app so you can launch yesterday.”
+  2. *Proof*: Showcase creator/brand matches, playbooks, dashboards—tie back to business outcomes.
+  3. *Invitation*: Call to action with a wink (“Let’s turn chaos into your next case study.”).
+- **Copy Conventions**
+  - Use contractions; avoid corporate jargon.
+  - Lead sections with verbs: “Ship faster.” “Match smarter.” “Scale with receipts.”
+  - Inject a humorous aside per section (parenthetical, footnote-style, or inline) that reinforces the point.
+  - Anchor benefits in operations (process, systems, tooling) then elevate with emotion (community, creator magic).
+- **Do/Don’t**
+  - Do keep CTA labels active: “Book the ops rescue,” “Spin up a brand sprint.”
+  - Do reference our ability to build soup-to-nuts: operations, brand, applications.
+  - Don’t drift into generic inspiration quotes or tech buzzword soup.
+  - Don’t write in third person; keep it “we/you.”
+
+---
+
 # ShareHeart Portfolio Branding Guidelines
 
 ## Design Philosophy

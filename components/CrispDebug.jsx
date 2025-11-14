@@ -65,8 +65,8 @@ export default function CrispDebug() {
     };
   }, []);
 
-  // Only show in development
-  if (process.env.NODE_ENV === "production") {
+  // Only show in development CRISP DEBUG
+  if (process.env.NODE_ENV === "development") {
     return null;
   }
 

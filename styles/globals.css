@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --brand-blue: #2563ff;
+  --brand-blue-dark: #1d4cff;
+  --brand-ink: #0f172a;
+  --brand-coral: #ff5a5f;
+  --brand-mint: #8ee3d4;
+  --brand-sky: #eef3ff;
+  --brand-cloud: #f6f7fb;
+
+  --font-display: var(--font-space-grotesk, "Space Grotesk");
+  --font-body: var(--font-inter, "Inter");
 }
 
 @theme inline {
@@ -22,8 +33,33 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-body {
+  font-family: var(--font-body), "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+.text-brand-ink {
+  color: var(--brand-ink);
+}
+
+.text-brand-blue {
+  color: var(--brand-blue);
+}
+
+.bg-brand-sky {
+  background-color: var(--brand-sky);
+}
+
+.bg-brand-cloud {
+  background-color: var(--brand-cloud);
 }
