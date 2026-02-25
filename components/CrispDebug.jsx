@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
  * Remove after confirming everything works
  */
 export default function CrispDebug() {
+
+  return null;
+  
   const [status, setStatus] = useState({
     loaded: false,
     websiteId: null,
