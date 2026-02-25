@@ -1,151 +1,100 @@
-import dynamic from "next/dynamic";
-import { Geist, Geist_Mono } from "next/font/google";
+"use client";
+
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Twitter, Code2, Zap, Layers } from "lucide-react";
+import { Mail, Github, Linkedin, Code2 } from "lucide-react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const skills = [
+  { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+  { category: "Backend", items: ["Node.js", "Supabase", "PostgreSQL", "REST APIs", "WebSockets"] },
+  { category: "Tools", items: ["Git", "Docker", "Vercel", "AWS", "Figma"] },
+];
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const contactMethods = [
+  { icon: Mail, label: "Email", value: "contact@growthdg.com", href: "mailto:contact@growthdg.com", external: true },
+  { icon: Github, label: "GitHub", value: "github.com/JaStacks", href: "https://github.com/JaStacks", external: true },
+  { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/jareice-graham", href: "https://www.linkedin.com/in/jareice-graham-93226b224/", external: true },
+];
 
 export default function FounderPage() {
-  const skills = [
-    { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
-    { category: "Backend", items: ["Node.js", "Supabase", "PostgreSQL", "REST APIs", "WebSockets"] },
-    { category: "Tools", items: ["Git", "Docker", "Vercel", "AWS", "Figma"] },
-  ];
-
-  const contactMethods = [
-    {
-      icon: Mail,
-      label: "Email",
-      value: "contact@growthdg.com",
-      href: "mailto:contact@growthdg.com",
-      color: "text-purple-600 dark:text-purple-400",
-    },
-    {
-      icon: Github,
-      label: "GitHub",
-      value: "github.com/JaStacks",
-      href: "https://github.com/JaStacks",
-      color: "text-zinc-700 dark:text-zinc-300",
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      value: "linkedin.com/in/jareice",
-      href: "https://linkedin.com/in/jareice",
-      color: "text-blue-600 dark:text-blue-400",
-    },
-    {
-      icon: Twitter,
-      label: "Twitter",
-      value: "@jareice",
-      href: "https://twitter.com/jareice",
-      color: "text-sky-500 dark:text-sky-400",
-    },
-  ];
-
   return (
-    <div className={`${geistSans.className} ${geistMono.className} min-h-screen bg-zinc-50 dark:bg-black`}>
-      {/* Hero Section */}
-      <section className="relative h-[70vh] w-full overflow-hidden bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white flex items-center justify-center">
+    <div className="min-h-screen bg-background text-dark">
+      {/* Hero */}
+      <section className="relative flex min-h-[70vh] w-full items-center justify-center overflow-hidden bg-dark py-24 text-primary">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center px-6 max-w-4xl mx-auto"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto max-w-4xl px-6 text-center"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6"
-          >
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">
-              Jareice Graham
-            </h1>
-            <p className="text-2xl md:text-3xl font-semibold text-purple-300 mb-4">
-              Founder & Full-Stack Developer
-            </p>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed"
-          >
-            Building scalable web applications and leading innovative projects. 
-            Passionate about creating seamless user experiences and solving complex problems with elegant solutions.
-          </motion.p>
+          <h1 className="font-heading mb-4 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+            Jareice Graham
+          </h1>
+          <p className="mb-6 text-xl font-semibold text-accent md:text-2xl">
+            Founder & Full-Stack Developer
+          </p>
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-primary/85">
+            I build scalable web apps and lead product from playbook to launch—focused on real-time systems,
+            clear UX, and code that stays maintainable.
+          </p>
         </motion.div>
       </section>
 
-      {/* About Section */}
-      <section className="relative w-full min-h-[80vh] overflow-hidden bg-white dark:bg-black py-24 md:py-32">
-        <div className="relative mx-auto w-full max-w-6xl px-6">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+      {/* About */}
+      <section className="relative w-full border-t border-dark/10 bg-background py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid gap-12 md:grid-cols-2 md:gap-16">
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5 }}
               className="space-y-6"
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-50">
+              <h2 className="font-heading text-3xl font-bold text-dark md:text-4xl">
                 About
               </h2>
-              <div className="space-y-4 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <div className="space-y-4 text-base leading-relaxed text-dark/75 md:text-lg">
                 <p>
-                  I'm a full-stack developer and founder passionate about creating seamless user experiences 
-                  and building robust, scalable applications. I specialize in modern web technologies 
-                  and enjoy solving complex problems with elegant solutions.
+                  I’m a full-stack developer and founder focused on seamless user experiences and
+                  robust, scalable applications. I work with modern web tech and aim to solve hard
+                  problems with simple, maintainable solutions.
                 </p>
                 <p>
-                  My work focuses on real-time systems, interactive interfaces, and full-stack 
-                  development. I believe in writing clean, maintainable code and creating 
-                  applications that users love to interact with.
-                </p>
-                <p>
-                  As a founder, I'm dedicated to building products that make a difference, 
-                  whether it's improving workflows, enhancing user experiences, or solving 
-                  real-world problems through technology.
+                  My work centers on real-time systems, interactive UIs, and full-stack delivery—from
+                  playbook and brand to shipped product. As a founder, I care most about building
+                  things that improve workflows and solve real problems.
                 </p>
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="space-y-8"
             >
-              <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+              <h3 className="font-heading text-xl font-bold text-dark md:text-2xl">
                 Skills & Technologies
               </h3>
               <div className="space-y-6">
                 {skills.map((skill, index) => (
                   <motion.div
                     key={skill.category}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: 16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.06 }}
                   >
-                    <h4 className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2 uppercase tracking-wider">
+                    <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-accent">
                       {skill.category}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {skill.items.map((item) => (
                         <span
                           key={item}
-                          className="px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-sm text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
+                          className="rounded-full border border-dark/10 bg-primary/30 px-3 py-1.5 text-sm text-dark"
                         >
                           {item}
                         </span>
@@ -159,56 +108,51 @@ export default function FounderPage() {
         </div>
       </section>
 
-      {/* Projects Highlight */}
-      <section className="relative w-full min-h-[60vh] overflow-hidden bg-zinc-50 dark:bg-black py-24 md:py-32">
-        <div className="relative mx-auto w-full max-w-6xl px-6">
+      {/* Featured Work */}
+      <section className="relative w-full border-t border-dark/10 bg-background py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="mb-12 text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+            <h2 className="font-heading mb-3 text-3xl font-bold text-dark md:text-4xl">
               Featured Work
             </h2>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-              A selection of projects I've built and led, showcasing expertise in full-stack development, 
-              real-time systems, and user experience design.
+            <p className="mx-auto max-w-2xl text-base text-dark/70 md:text-lg">
+              Selected projects—full-stack, real-time systems, and product delivery.
             </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-4xl mx-auto"
+            transition={{ delay: 0.1 }}
+            className="mx-auto max-w-2xl"
           >
-            <a
+            <Link
               href="/projects/shareheart"
-              className="group block rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group block rounded-[2rem] border border-dark/10 bg-background p-6 shadow-sm transition-shadow hover:shadow-md md:p-8"
             >
-              <div className="flex items-start justify-between gap-6">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-50 dark:from-purple-950/20 dark:via-indigo-950/20 dark:to-purple-950/20 border border-purple-200/50 dark:border-purple-800/50">
-                      <Code2 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                      ShareHeart.io
-                    </h3>
-                  </div>
-                  <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                    Full‑stack video wall app with live updates for hundreds of users. Event‑driven syncing 
-                    and automated workflows keep content real‑time and reliable. Built with React, Next.js, 
-                    and Supabase for seamless real-time collaboration.
+              <div className="flex items-start gap-4 md:gap-6">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-dark/10 bg-primary/30">
+                  <Code2 className="h-6 w-6 text-accent" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-heading mb-2 text-xl font-bold text-dark transition-colors group-hover:text-accent md:text-2xl">
+                    ShareHeart.io
+                  </h3>
+                  <p className="mb-4 text-sm leading-relaxed text-dark/70 md:text-base">
+                    Full-stack video wall with live sync for hundreds of users. Event-driven architecture,
+                    approval workflows, and AI-assisted collection. React, Next.js, Supabase.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {["React", "Next.js", "Node.js", "Supabase", "Realtime", "TypeScript"].map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs px-3 py-1.5 rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 font-medium"
+                        className="rounded-full border border-dark/10 bg-primary/30 px-2.5 py-1 text-xs font-medium text-dark"
                       >
                         {tag}
                       </span>
@@ -216,60 +160,62 @@ export default function FounderPage() {
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="relative w-full min-h-[60vh] overflow-hidden bg-white dark:bg-black py-24 md:py-32">
-        <div className="relative mx-auto w-full max-w-6xl px-6">
+      {/* Contact */}
+      <section className="relative w-full border-t border-dark/10 bg-background py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="mb-12 text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+            <h2 className="font-heading mb-3 text-3xl font-bold text-dark md:text-4xl">
               Get In Touch
             </h2>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-              Always open to discussing new projects, creative ideas, or opportunities to collaborate.
+            <p className="mx-auto max-w-2xl text-base text-dark/70 md:text-lg">
+              Open to new projects, ideas, and collaboration.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
             {contactMethods.map((method, index) => {
               const Icon = method.icon;
+              const card = (
+                <div className="flex items-center gap-4 rounded-[2rem] border border-dark/10 bg-background p-5 transition-colors hover:border-accent/20 hover:bg-primary/10">
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-primary/30">
+                    <Icon className="h-5 w-5 text-accent" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-dark/60">
+                      {method.label}
+                    </p>
+                    <p className="truncate text-base font-medium text-dark">
+                      {method.value}
+                    </p>
+                  </div>
+                </div>
+              );
               return (
-                <motion.a
+                <motion.div
                   key={method.label}
-                  href={method.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-purple-300 dark:hover:border-purple-700 transition-all shadow-sm hover:shadow-md"
+                  transition={{ duration: 0.4, delay: index * 0.06 }}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/20 transition-colors ${method.color}`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wider">
-                        {method.label}
-                      </h3>
-                      <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                        {method.value}
-                      </p>
-                    </div>
-                  </div>
-                </motion.a>
+                  {method.external ? (
+                    <a href={method.href} target="_blank" rel="noopener noreferrer" className="block">
+                      {card}
+                    </a>
+                  ) : (
+                    <Link href={method.href}>{card}</Link>
+                  )}
+                </motion.div>
               );
             })}
           </div>
@@ -278,4 +224,3 @@ export default function FounderPage() {
     </div>
   );
 }
-

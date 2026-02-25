@@ -1,9 +1,23 @@
 @import "tailwindcss";
 
+/* Cinematic design system — Preset C "Brutalist Signal" */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #e8e4dd;
+  --accent: #e63b2e;
+  --background: #f5f3ee;
+  --dark: #111111;
+  --radius-card: 2rem;
+  --radius-section: 3rem;
+  --radius-footer: 4rem;
+  --font-heading: var(--font-space-grotesk, "Space Grotesk");
+  --font-drama: var(--font-dm-serif, "DM Serif Display");
+  --font-mono: var(--font-space-mono, "Space Mono");
+  --ease-magnetic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
+  /* Legacy brand aliases for gradual migration */
+  --background-legacy: #ffffff;
+  --foreground: #171717;
   --brand-blue: #2563ff;
   --brand-blue-dark: #1d4cff;
   --brand-ink: #0f172a;
@@ -11,55 +25,76 @@
   --brand-mint: #8ee3d4;
   --brand-sky: #eef3ff;
   --brand-cloud: #f6f7fb;
-
-  --font-display: var(--font-space-grotesk, "Space Grotesk");
-  --font-body: var(--font-inter, "Inter");
+  --font-display: var(--font-heading);
+  --font-body: var(--font-heading);
 }
 
 @theme inline {
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-dark: var(--dark);
+  --color-foreground: var(--dark);
+  --font-sans: var(--font-heading);
+  --font-mono: var(--font-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background-legacy: #0a0a0a;
     --foreground: #ededed;
   }
 }
 
+/* Global noise overlay — 0.05 opacity */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--dark);
+  font-family: var(--font-heading), "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-display {
-  font-family: var(--font-display), "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif;
+.font-display,
+.font-heading {
+  font-family: var(--font-heading), "Space Grotesk", "Inter", Helvetica Neue, Arial, sans-serif;
   letter-spacing: -0.02em;
 }
 
+.font-drama {
+  font-family: var(--font-drama), "DM Serif Display", Georgia, serif;
+  font-style: italic;
+}
+
+.font-mono,
+.font-data {
+  font-family: var(--font-mono), "Space Mono", ui-monospace, monospace;
+}
+
 .font-body {
-  font-family: var(--font-body), "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-heading), "Inter", Helvetica Neue, Arial, sans-serif;
 }
 
-.text-brand-ink {
-  color: var(--brand-ink);
-}
+.text-brand-ink { color: var(--brand-ink); }
+.text-brand-blue { color: var(--brand-blue); }
+.bg-brand-sky { background-color: var(--brand-sky); }
+.bg-brand-cloud { background-color: var(--brand-cloud); }
 
-.text-brand-blue {
-  color: var(--brand-blue);
-}
-
-.bg-brand-sky {
-  background-color: var(--brand-sky);
-}
-
-.bg-brand-cloud {
-  background-color: var(--brand-cloud);
-}
+.bg-primary { background-color: var(--primary); }
+.bg-accent { background-color: var(--accent); }
+.bg-dark { background-color: var(--dark); }
+.text-primary { color: var(--primary); }
+.text-accent { color: var(--accent); }
+.text-dark { color: var(--dark); }
+.border-primary { border-color: var(--primary); }
+.border-accent { border-color: var(--accent); }
+.border-dark { border-color: var(--dark); }

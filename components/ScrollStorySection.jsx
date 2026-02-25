@@ -36,32 +36,32 @@ export default function AboutSection() {
   ];
 
   return (
-    <section ref={ref} className="relative w-full min-h-[100vh] overflow-hidden bg-white dark:bg-black py-16 sm:py-20 md:py-24 lg:py-32">
-      <motion.div 
-        style={{ 
+    <section ref={ref} className="relative w-full min-h-[100vh] overflow-hidden bg-[var(--background)] py-16 sm:py-20 md:py-24 lg:py-32">
+      <motion.div
+        style={{
           y: bgY,
-          willChange: prefersReducedMotion ? "auto" : "transform"
-        }} 
+          willChange: prefersReducedMotion ? "auto" : "transform",
+        }}
         className="pointer-events-none absolute inset-0 opacity-20"
       >
-        <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-purple-500 blur-3xl" />
-        <div className="absolute right-0 bottom-10 h-72 w-72 rounded-full bg-indigo-500 blur-3xl" />
+        <div className="absolute -left-24 top-16 h-64 w-64 rounded-full blur-3xl bg-primary/60" style={{ backgroundColor: "rgba(232,228,221,0.6)" }} />
+        <div className="absolute right-0 bottom-10 h-72 w-72 rounded-full blur-3xl bg-accent/30" style={{ backgroundColor: "rgba(230,59,46,0.3)" }} />
       </motion.div>
 
       <div className="relative mx-auto flex h-full w-full max-w-6xl items-center px-6">
-        <div className="w-full grid md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16">
-          <motion.div 
-            style={{ 
-              y: fgY, 
+        <div className="grid w-full gap-8 sm:gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
+          <motion.div
+            style={{
+              y: fgY,
               opacity,
-              willChange: prefersReducedMotion ? "auto" : "transform"
-            }} 
+              willChange: prefersReducedMotion ? "auto" : "transform",
+            }}
             className="space-y-4 sm:space-y-5 md:space-y-6"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-50">
+            <h2 className="font-heading text-4xl font-bold text-dark md:text-5xl">
               About
             </h2>
-            <div className="space-y-4 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <div className="space-y-4 text-lg leading-relaxed text-[var(--dark)]/70">
               <p>
                 We specialize in creating seamless user experiences and building robust, 
                 scalable applications. Our expertise lies in modern web technologies and 
@@ -75,15 +75,15 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          <motion.div 
-            style={{ 
-              y: fgY, 
-              opacity: opacity,
-              willChange: prefersReducedMotion ? "auto" : "transform"
-            }} 
+          <motion.div
+            style={{
+              y: fgY,
+              opacity,
+              willChange: prefersReducedMotion ? "auto" : "transform",
+            }}
             className="space-y-6 sm:space-y-7 md:space-y-8"
           >
-            <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            <h3 className="font-heading text-2xl font-bold text-dark md:text-3xl">
               Skills & Technologies
             </h3>
             <div className="space-y-6">
@@ -93,20 +93,21 @@ export default function AboutSection() {
                   initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-                  transition={{ 
-                    duration: prefersReducedMotion ? 0 : 0.5, 
+                  transition={{
+                    duration: prefersReducedMotion ? 0 : 0.5,
                     delay: prefersReducedMotion ? 0 : index * 0.1,
-                    ease: [0.4, 0, 0.2, 1]
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  <h4 className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-2 uppercase tracking-wider">
+                  <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-accent" style={{ color: "var(--accent)" }}>
                     {skill.category}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {skill.items.map((item) => (
                       <span
                         key={item}
-                        className="px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-sm text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
+                        className="rounded-full border border-[var(--dark)]/10 bg-[var(--primary)]/40 px-3 py-1.5 text-sm text-dark"
+                        style={{ borderColor: "rgba(17,17,17,0.1)" }}
                       >
                         {item}
                       </span>

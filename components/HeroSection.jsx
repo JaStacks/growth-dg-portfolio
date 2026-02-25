@@ -54,7 +54,9 @@ export default function HeroSection() {
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a
-              href="#contact"
+              href="https://cal.com/jareice-graham-qay95z/30min"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{
                 backgroundColor: "var(--brand-blue)",

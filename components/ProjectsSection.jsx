@@ -27,23 +27,23 @@ export default function ProjectsSection() {
   }, []);
 
   return (
-    <section className="w-full py-16 sm:py-20 md:py-24 lg:py-32 bg-zinc-50 dark:bg-black">
-      <div className="mx-auto w-full max-w-6xl px-6">
+    <section className="w-full bg-[var(--background)] py-16 sm:py-20 md:py-24 lg:py-32">
+      <div className="relative mx-auto w-full max-w-6xl px-6">
         <motion.div
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-          transition={{ 
+          transition={{
             duration: prefersReducedMotion ? 0 : 0.8,
-            ease: [0.4, 0, 0.2, 1]
+            ease: [0.22, 1, 0.36, 1],
           }}
-          className="text-center mb-12 sm:mb-14 md:mb-16"
+          className="mb-12 text-center sm:mb-14 md:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-3 md:mb-4">
+          <h2 className="font-heading mb-3 text-3xl font-bold tracking-tight text-dark sm:text-4xl md:mb-4 md:text-5xl">
             Featured Projects
           </h2>
-          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            A selection of projects we've built, showcasing our expertise in full-stack development, 
+          <p className="mx-auto max-w-2xl text-base text-[var(--dark)]/70 sm:text-lg">
+            A selection of projects we've built, showcasing our expertise in full-stack development,
             real-time systems, and user experience design.
           </p>
         </motion.div>

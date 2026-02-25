@@ -1,0 +1,10 @@
+---
+description: When building a cinematic landing page, follow the full spec in cursor.md
+alwaysApply: false
+---
+
+# Cinematic Landing Page Builder
+
+When the user asks to build a cinematic landing page (or to build a site using this builder), read **cursor.md** at the project root and follow it exactly.
+
+**Agent Flow:** In a single call, ask the 4 questions from cursor.md using AskUserQuestion (brand name + purpose, aesthetic preset, 3 value propositions, primary CTA). Do not ask follow-ups. Then build the full site from the answers according to the presets, design system, component architecture, and build sequence defined in cursor.md.
